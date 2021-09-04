@@ -3,12 +3,19 @@
 #include <linux/kernel.h>
 #include <linux/netfilter.h>
 #include <linux/netfilter_ipv4.h>
+#include <linux/ip.h>
 
 MODULE_LICENSE("MIT");
 
 unsigned int hook_func(void *priv, struct sk_buff *skb, const struct nf_hook_state *state)
 {
-    printk(KERN_INFO "packet accepted\n");
+    struct iphdr *ip_headers = (struct iphdr *)skb_network_header(skb);
+    printk(KERN_DEBUG "packet accepted\n");
+    printk(KERN_DEBUG "Buffer data %c", &skb->data);
+    printk(KERN_DEBUG "In Device Name %c", &state->in->name);
+    printk(KERN_DEBUG "Src IPV4 Source %d", &ip_headers->saddr);
+    printk(KERN_DEBUG "Out Device Name %c", &state->out->name);
+    printk(KERN_DEBUG "Dst IPV4 Source %d", &ip_headers->daddr);
     return NF_ACCEPT;
 }
 
