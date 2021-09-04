@@ -1,5 +1,6 @@
-obj-m := src/main.o
-KDIR := /lib/modules/$(shell uname -r)/build
+HOOK_MAKEFILE = build/Makefile
 
-default: 
-	$(MAKE) -C $(KDIR) M=$(shell pwd) modules
+default:
+	$(MAKE) -f $(HOOK_MAKEFILE)
+%:
+	$(MAKE) -f $(HOOK_MAKEFILE) $@
